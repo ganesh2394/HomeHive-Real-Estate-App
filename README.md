@@ -103,9 +103,9 @@ REACT_APP_FIREBASE_PROJECT_ID=your_project_id
 
 ## API Documentation
 
-The API documentation for this project is available in the Postman collection. You can access it directly here:
+The API documentation for this project is available in the Postman collection. You can access json file directly here:
 
-📄 **[Download Postman Collection](https://raw.githubusercontent.com/your-username/HomeHive-Real-Estate-App/main/client/public/doc/HomeHive%20Real%20Estate%20Documentation.postman_collection.json)**
+📄 **[Download Postman Json](https://github.com/ganesh2394/HomeHive-Real-Estate-App/blob/main/client/public/doc/HomeHive%20Real%20Estate%20Documentation.postman_collection.json?raw=true)**
 
 Alternatively, you can access the online API documentation on Postman:
 
