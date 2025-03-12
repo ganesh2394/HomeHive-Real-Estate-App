@@ -182,5 +182,5 @@ If you find any bugs or have feature requests, open an issue or reach out via Gi
 
 💡 Have questions? Reach out to me!  
 📩 Email: gp2581739@gmail.com  
-🐙 GitHub: [Your GitHub](https://github.com/ganesh2394/)  
-🚀 LinkedIn: [Your LinkedIn](https://www.linkedin.com/in/ganesh-prasad09/)
+🐙 GitHub: [GitHub Profile](https://github.com/ganesh2394/)  
+🚀 LinkedIn: [LinkedIn Profile](https://www.linkedin.com/in/ganesh-prasad09/)
