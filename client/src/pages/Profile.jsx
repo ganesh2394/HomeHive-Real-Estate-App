@@ -3,13 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { FiUpload, FiTrash, FiLogOut } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "firebase/storage";
-import app from "../firebase";
-import {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
@@ -46,24 +39,45 @@ export default function Profile() {
     const cloud_name = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", upload_preset); // Replace with your actual preset
+    formData.append("upload_preset", upload_preset);
 
     try {
-      const res = await fetch(
+      const xhr = new XMLHttpRequest();
+      xhr.open(
+        "POST",
         `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
+        true
       );
 
-      const data = await res.json();
-      if (data.secure_url) {
-        setFormData((prev) => ({ ...prev, avatar: data.secure_url }));
-      } else {
-        console.error("Cloudinary upload failed:", data);
+      // Track upload progress
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const percent = Math.round((event.loaded * 100) / event.total);
+          setFilePerc(percent);
+        }
+      };
+      xhr.onload = async () => {
+        if (xhr.status === 200) {
+          const data = JSON.parse(xhr.responseText);
+          if (data.secure_url) {
+            setFormData((prev) => ({ ...prev, avatar: data.secure_url }));
+            setFilePerc(100); // Set to 100% on success
+          } else {
+            console.error("Cloudinary upload failed:", data);
+            setFileUploadError(true);
+          }
+        } else {
+          console.error("Upload failed with status:", xhr.status);
+          setFileUploadError(true);
+        }
+      };
+
+      xhr.onerror = () => {
+        console.error("Error uploading to Cloudinary.");
         setFileUploadError(true);
-      }
+      };
+
+      xhr.send(formData);
     } catch (error) {
       console.error("Error uploading to Cloudinary:", error);
       setFileUploadError(true);
@@ -142,6 +156,7 @@ export default function Profile() {
 
       setUserListings(data);
     } catch (error) {
+      console.error("Error fetching listings:", error);
       setShowListingsError(true);
     }
   };

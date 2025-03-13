@@ -20,6 +20,10 @@ export default function Header() {
   };
 
   useEffect(() => {
+    document.title = "HomeHive | Real Estate";
+  }, []);
+
+  useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = urlParams.get("searchTerm");
     if (searchTermFromUrl) {
@@ -31,7 +35,15 @@ export default function Header() {
     <header className="bg-white shadow-md sticky top-0 z-50">
       <div className="container mx-auto flex items-center justify-between p-4">
         {/* Logo */}
-        <Link to="/" className="text-2xl font-bold text-blue-600">
+        <Link
+          to="/"
+          className="flex items-center text-2xl font-bold text-blue-600"
+        >
+          <img
+            src="/favicon-96x96.png"
+            alt="HomeHive Logo"
+            className="w-12 h-12 object-contain mr-3"
+          />
           <span className="text-gray-800">Estate</span>
           <span className="text-blue-600">Ease</span>
         </Link>
