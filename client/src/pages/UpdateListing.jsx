@@ -162,7 +162,7 @@ export default function UpdateListing() {
         return setError("Discount price must be lower than regular price");
       setLoading(true);
       setError(false);
-      console.log("Params Id :", params.listingId);
+      // console.log("Params Id :", params.listingId);
       const res = await fetch(`/api/listing/update/${params.listingId}`, {
         method: "POST",
         headers: {

@@ -33,22 +33,35 @@ export default function Listing() {
   useEffect(() => {
     const fetchListing = async () => {
       try {
+        if (!params.listingId) {
+          console.error("Listing ID is undefined");
+          setError(true);
+          return;
+        }
+
         setLoading(true);
+        // console.log("Fetching Listing with ID:", params.listingId);
+
         const res = await fetch(`/api/listing/get/${params.listingId}`);
         const data = await res.json();
-        if (data.success === false) {
+
+        if (!res.ok) {
+          console.error("Server Error:", data);
           setError(true);
           setLoading(false);
           return;
         }
+
         setListing(data);
         setLoading(false);
         setError(false);
       } catch (error) {
+        console.error("Fetch Listing Error:", error);
         setError(true);
         setLoading(false);
       }
     };
+
     fetchListing();
   }, [params.listingId]);
 

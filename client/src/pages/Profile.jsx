@@ -37,30 +37,37 @@ export default function Profile() {
     }
   }, [file]);
 
-  const handleFileUpload = (file) => {
+  const handleFileUpload = async (file) => {
     if (!file) {
       console.error("No file selected.");
       return;
     }
-    const storage = getStorage(app);
-    const fileName = new Date().getTime() + file.name;
-    const storageRef = ref(storage, fileName);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+    const upload_preset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+    const cloud_name = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", upload_preset); // Replace with your actual preset
 
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setFilePerc(Math.round(progress));
-      },
-      () => setFileUploadError(true),
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setFormData((prev) => ({ ...prev, avatar: downloadURL }));
-        });
+    try {
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await res.json();
+      if (data.secure_url) {
+        setFormData((prev) => ({ ...prev, avatar: data.secure_url }));
+      } else {
+        console.error("Cloudinary upload failed:", data);
+        setFileUploadError(true);
       }
-    );
+    } catch (error) {
+      console.error("Error uploading to Cloudinary:", error);
+      setFileUploadError(true);
+    }
   };
 
   const handleChange = (e) => {
@@ -70,17 +77,20 @@ export default function Profile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(updateUserStart());
+
     try {
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
+
       const data = await res.json();
       if (data.success === false) {
         dispatch(updateUserFailure(data.message));
         return;
       }
+
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
     } catch (error) {

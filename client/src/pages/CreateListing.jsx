@@ -1,13 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytesResumable,
-} from "firebase/storage";
-import app from "../firebase.js";
+import axios from "axios";
 export default function CreateListing() {
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -31,7 +25,7 @@ export default function CreateListing() {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // console.log(formData); 
+  // console.log(formData);
   const handleImageSubmit = (e) => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
       setUploading(true);
@@ -41,6 +35,7 @@ export default function CreateListing() {
       for (let i = 0; i < files.length; i++) {
         promises.push(storeImage(files[i]));
       }
+
       Promise.all(promises)
         .then((urls) => {
           setFormData({
@@ -51,37 +46,34 @@ export default function CreateListing() {
           setUploading(false);
         })
         .catch((err) => {
-          setImageUploadError("Image upload failed (2 mb max per image)");
+          setImageUploadError("Image upload failed (2 MB max per image)");
           setUploading(false);
         });
     } else {
-      setImageUploadError("You can only upload 6 images per listing");
+      setImageUploadError("You can only upload up to 6 images per listing");
       setUploading(false);
     }
   };
 
   const storeImage = async (file) => {
-    return new Promise((resolve, reject) => {
-      const storage = getStorage(app);
-      const fileName = new Date().getTime() + file.name;
-      const storageRef = ref(storage, fileName);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log(`Upload is ${progress}% done`);
-        },
-        (error) => {
-          reject(error);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            resolve(downloadURL);
-          });
-        }
-      );
+    return new Promise(async (resolve, reject) => {
+      const upload_preset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+      const cloud_name = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME; // Ensure this is prefixed with REACT_APP_
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", upload_preset);
+
+      try {
+        const res = await axios.post(
+          `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`, // Fixed the URL
+          formData
+        );
+        resolve(res.data.secure_url); // Cloudinary returns the image URL
+        // console.log(res.data.secure_url);
+      } catch (error) {
+        reject(error);
+      }
     });
   };
 
@@ -144,6 +136,12 @@ export default function CreateListing() {
       });
       const data = await res.json();
       setLoading(false);
+
+      if (!res.ok) {
+        console.error("Server Error:", data);
+        setError(data.message || "Something went wrong on the server");
+        return;
+      }
       if (data.success === false) {
         setError(data.message);
       }

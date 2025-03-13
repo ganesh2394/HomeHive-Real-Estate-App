@@ -58,7 +58,7 @@ const listingSchema = new mongoose.Schema(
     type: {
       type: String,
       required: true,
-      enum: ["apartment", "house", "villa", "studio"],
+      enum: ["apartment", "house", "villa", "studio", "rent", "sale"],
     },
     offer: {
       type: Boolean,

@@ -120,42 +120,50 @@ export default function About() {
           Meet Our Experts
         </motion.h2>
         <div className="grid sm:grid-cols-4 gap-8 max-w-6xl mx-auto mt-8 px-6">
-          <div className="p-6 bg-gray-50 rounded-lg shadow-md">
-            <img
-              src="https://via.placeholder.com/150"
-              alt="Team Member"
-              className="rounded-full mx-auto w-24"
-            />
-            <h3 className="text-xl font-bold mt-4">Ganesh Prasad</h3>
-            <p className="text-blue-600 mt-1">Full Stack Developer</p>
-          </div>
-          <div className="p-6 bg-gray-50 rounded-lg shadow-md">
-            <img
-              src="https://via.placeholder.com/150"
-              alt="Team Member"
-              className="rounded-full mx-auto w-24"
-            />
-            <h3 className="text-xl font-bold mt-4">Abhishek Ahirwar</h3>
-            <p className="text-blue-600 mt-1">React Developer</p>
-          </div>
-          <div className="p-6 bg-gray-50 rounded-lg shadow-md">
-            <img
-              src="https://via.placeholder.com/150"
-              alt="Team Member"
-              className="rounded-full mx-auto w-24"
-            />
-            <h3 className="text-xl font-bold mt-4">Priyanshu Chouhan</h3>
-            <p className="text-blue-600 mt-1">Documentation Advisor</p>
-          </div>
-          <div className="p-6 bg-gray-50 rounded-lg shadow-md">
-            <img
-              src="https://via.placeholder.com/150"
-              alt="Team Member"
-              className="rounded-full mx-auto w-24"
-            />
-            <h3 className="text-xl font-bold mt-4">Sapna Mandloi</h3>
-            <p className="text-blue-600 mt-1">Content Creator</p>
-          </div>
+          {[
+            {
+              name: "Ganesh Prasad",
+              role: "Full Stack Developer",
+              image: "profile_01.jpg",
+              description:
+                "Expert in building scalable web applications and backend systems. Passionate about Java, React, and cloud computing.",
+            },
+            {
+              name: "Abhishek Ahirwar",
+              role: "React Developer",
+              image: "profile_02.jpg",
+              description:
+                "Specializes in creating dynamic user interfaces with React and Next.js. Loves optimizing performance and UX design.",
+            },
+            {
+              name: "Priyanshu Chouhan",
+              role: "Documentation Advisor",
+              image: "profile_03.jpg",
+              description:
+                "Ensures clear and concise technical documentation, making complex concepts easy to understand for developers.",
+            },
+            {
+              name: "Sapna Mandloi",
+              role: "Content Creator",
+              image: "profile_04.jpg",
+              description:
+                "Creates engaging and informative content on technology and development, bridging the gap between tech and storytelling.",
+            },
+          ].map((member, index) => (
+            <div
+              key={index}
+              className="p-6 bg-gray-50 rounded-lg shadow-md text-center"
+            >
+              <img
+                src={`/images/${member.image}`}
+                alt={member.name}
+                className="rounded-full w-24 h-24 object-cover mx-auto border-4 border-gray-200 shadow-lg"
+              />
+              <h3 className="text-xl font-bold mt-4">{member.name}</h3>
+              <p className="text-blue-600 mt-1 font-semibold">{member.role}</p>
+              <p className="text-gray-700 mt-2 text-sm">{member.description}</p>
+            </div>
+          ))}
         </div>
       </section>
 
