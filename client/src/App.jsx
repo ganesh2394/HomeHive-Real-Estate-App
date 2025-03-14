@@ -18,7 +18,18 @@ export default function App() {
   return (
     <BrowserRouter>
       <Header />
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense
+        fallback={
+          <div className="flex justify-center items-center h-screen w-full bg-gray-100">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+              <p className="mt-4 text-lg font-semibold text-gray-700">
+                Loading...
+              </p>
+            </div>
+          </div>
+        }
+      >
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
