@@ -16,8 +16,6 @@ export const deleteListing = async (req, res, next) => {
   if (!listing) {
     return next(errorHandler(404, "Listing not found!"));
   }
-  // console.log("Request User ID:", req.user.id);
-  // console.log("Listing Owner ID:", listing.userRef);
 
   if (req.user.id !== listing.userRef.toString()) {
     return next(errorHandler(401, "You can only delete your own listings!"));
@@ -66,7 +64,6 @@ export const getListing = async (req, res, next) => {
 
 export const getListings = async (req, res, next) => {
   try {
-    // console.log("Request query:", req.query);
 
     const limit = parseInt(req.query.limit) || 9;
     const startIndex = parseInt(req.query.startIndex) || 0;
@@ -96,14 +93,11 @@ export const getListings = async (req, res, next) => {
       type,
     };
 
-    // console.log("Final MongoDB Query:", JSON.stringify(query, null, 2));
-
     const listings = await Listing.find(query)
       .sort({ [sort]: order })
       .limit(limit)
       .skip(startIndex);
-
-    // console.log("Fetch Listings:", listings);
+      
     return res.status(200).json(listings);
   } catch (error) {
     next(error);

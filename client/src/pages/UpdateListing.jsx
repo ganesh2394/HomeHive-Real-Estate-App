@@ -12,7 +12,6 @@ export default function UpdateListing() {
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const params = useParams();
-  // console.log("Listing ID:", params.id);
   const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({
     imageUrls: [],
@@ -162,7 +161,6 @@ export default function UpdateListing() {
         return setError("Discount price must be lower than regular price");
       setLoading(true);
       setError(false);
-      // console.log("Params Id :", params.listingId);
       const res = await fetch(`/api/listing/update/${params.listingId}`, {
         method: "POST",
         headers: {

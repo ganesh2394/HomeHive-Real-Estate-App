@@ -27,9 +27,7 @@ export default function Listing() {
   const [contact, setContact] = useState(false);
   const params = useParams();
   const { currentUser } = useSelector((state) => state.user);
-  // console.log("current User ", currentUser);
-  // console.log("current user id : ", currentUser._id);
-  // console.log("userRef : ", listing.userRef);
+
   useEffect(() => {
     const fetchListing = async () => {
       try {
@@ -40,7 +38,6 @@ export default function Listing() {
         }
 
         setLoading(true);
-        // console.log("Fetching Listing with ID:", params.listingId);
 
         const res = await fetch(`/api/listing/get/${params.listingId}`);
         const data = await res.json();
