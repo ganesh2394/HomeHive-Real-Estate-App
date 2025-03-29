@@ -28,7 +28,7 @@ export default function ListingItem({ listing }) {
             {listing.description}
           </p>
           <p className="text-lg font-bold text-indigo-700 ">
-            $
+           ₹{" "}
             {listing.offer
               ? listing.discountPrice
                 ? listing.discountPrice.toLocaleString("en-US")
