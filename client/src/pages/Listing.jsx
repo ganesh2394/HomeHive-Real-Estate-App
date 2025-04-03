@@ -13,6 +13,9 @@ import {
   FaMapMarkerAlt,
   FaParking,
   FaShare,
+  FaStar,
+  FaStarHalfAlt,
+  FaRegStar,
 } from "react-icons/fa";
 import Contact from "../components/Contact";
 
@@ -27,8 +30,28 @@ export default function Listing() {
   const [contact, setContact] = useState(false);
   const params = useParams();
   const { currentUser } = useSelector((state) => state.user);
+  const defaultRating = 4.5;
+  const [feedback, setFeedback] = useState([]);
+  const [newFeedback, setNewFeedback] = useState({
+    name: "",
+    rating: 5,
+    comment: "",
+  });
 
   useEffect(() => {
+    setFeedback([
+      {
+        name: "Abhishek Ahirwar",
+        rating: 4.5,
+        comment: "Great place, loved it!",
+      },
+      {
+        name: "Priyanshu Chouhan",
+        rating: 4,
+        comment: "Nice but could be cleaner.",
+      },
+    ]);
+
     const fetchListing = async () => {
       try {
         if (!params.listingId) {
@@ -61,6 +84,27 @@ export default function Listing() {
 
     fetchListing();
   }, [params.listingId]);
+
+  const handleFeedbackSubmit = (e) => {
+    e.preventDefault();
+    if (!newFeedback.name || !newFeedback.comment) return;
+    setFeedback([...feedback, newFeedback]);
+    setNewFeedback({ name: "", rating: 5, comment: "" });
+  };
+
+  const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      if (i <= rating) {
+        stars.push(<FaStar key={i} className="text-yellow-500" />);
+      } else if (i - 0.5 === rating) {
+        stars.push(<FaStarHalfAlt key={i} className="text-yellow-500" />);
+      } else {
+        stars.push(<FaRegStar key={i} className="text-gray-400" />);
+      }
+    }
+    return stars;
+  };
 
   return (
     <main>
@@ -101,24 +145,38 @@ export default function Listing() {
             </p>
           )}
           <div className="flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4">
-            <p className="text-2xl font-semibold">
-              {listing.name} - ₹{" "}
+            <p className="text-2xl font-semibold capitalize">
+              <span className="text-3xl">{listing.name}</span> - ₹{" "}
               {listing.offer
                 ? listing.discountPrice.toLocaleString("en-US")
                 : listing.regularPrice.toLocaleString("en-US")}
               {listing.type === "rent" && " / month"}
             </p>
-            <p className="flex items-center mt-6 gap-2 text-slate-600  text-sm">
-              <FaMapMarkerAlt className="text-green-700" />
-              {listing.address}
+            <p className="text-lg font-semibold flex items-center gap-1">
+              Rating : {renderStars(defaultRating)}
+              <span className="text-slate-600 ml-2">({defaultRating})</span>
             </p>
+            <p className="flex items-center mt-1 text-slate-600">
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                  listing.address
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 hover:underline text-blue-600"
+              >
+                <FaMapMarkerAlt className="text-green-700" />
+                {listing.address}
+              </a>
+            </p>
+
             <div className="flex gap-4">
               <p className="bg-red-900 w-full max-w-[200px] text-white text-center p-1 rounded-md">
                 {listing.type === "rent" ? "For Rent" : "For Sale"}
               </p>
               {listing.offer && (
                 <p className="bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md">
-                  ₹ {" "}{+listing.regularPrice - +listing.discountPrice} OFF
+                  ₹ {+listing.regularPrice - +listing.discountPrice} OFF
                 </p>
               )}
             </div>
@@ -157,6 +215,53 @@ export default function Listing() {
               </button>
             )}
             {contact && <Contact listing={listing} />}
+
+            {/* Feedback Section */}
+            <div className="mt-10">
+              <h2 className="text-2xl font-semibold">Feedback Of Users</h2>
+              <ul className="mt-4">
+                {feedback.map((fb, index) => (
+                  <li key={index} className="border p-3 rounded-md my-2">
+                    <p className="text-lg font-semibold">{fb.name}</p>
+                    <p className="text-sm text-gray-500 flex items-center gap-1">
+                      {renderStars(fb.rating)} ({fb.rating})
+                    </p>
+                    <p className="text-gray-800">{fb.comment}</p>
+                  </li>
+                ))}
+              </ul>
+
+              {/* Feedback Form */}
+              <h3 className="text-xl font-semibold mt-6">Leave a Review</h3>
+              <form
+                className="mt-4 flex flex-col gap-3"
+                onSubmit={handleFeedbackSubmit}
+              >
+                <input
+                  type="text"
+                  placeholder="Your Name"
+                  value={newFeedback.name}
+                  onChange={(e) =>
+                    setNewFeedback({ ...newFeedback, name: e.target.value })
+                  }
+                  className="border p-2 rounded-md"
+                />
+                <textarea
+                  placeholder="Your Review"
+                  value={newFeedback.comment}
+                  onChange={(e) =>
+                    setNewFeedback({ ...newFeedback, comment: e.target.value })
+                  }
+                  className="border p-2 rounded-md"
+                />
+                <button
+                  type="submit"
+                  className="bg-blue-600 text-white p-2 rounded-md"
+                >
+                  Submit
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       )}

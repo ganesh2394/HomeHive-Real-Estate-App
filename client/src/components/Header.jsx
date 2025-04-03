@@ -55,8 +55,8 @@ export default function Header() {
         >
           <input
             type="text"
-            placeholder="Search Here..."
-            className="bg-transparent outline-none px-2 w-48 md:w-64"
+            placeholder="Search for locality or landmark..."
+            className="bg-transparent outline-none px-2 w-58 md:w-64"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -67,15 +67,12 @@ export default function Header() {
 
         {/* Navigation Links (Desktop) */}
         <nav className="hidden md:flex space-x-6 items-center">
-          <Link
-            to="/"
-            className="text-gray-700 hover:text-blue-600 font-medium"
-          >
+          <Link to="/" className="text-black hover:text-blue-600 font-sans">
             Home
           </Link>
           <Link
             to="/about"
-            className="text-gray-700 hover:text-blue-600 font-medium"
+            className="text-black hover:text-blue-600 font-sans"
           >
             About
           </Link>
@@ -92,7 +89,7 @@ export default function Header() {
           ) : (
             <Link
               to="/sign-in"
-              className="text-gray-700 hover:text-blue-600 font-medium"
+              className="text-black hover:text-blue-600 font-md"
             >
               Sign In
             </Link>
@@ -102,7 +99,7 @@ export default function Header() {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden text-gray-700"
+          className="md:hidden text-black"
         >
           {menuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
         </button>
@@ -115,14 +112,14 @@ export default function Header() {
             <Link
               to="/"
               onClick={() => setMenuOpen(false)}
-              className="text-gray-700 hover:text-blue-600 font-medium"
+              className="text-black hover:text-blue-600 font-sans text-xl"
             >
               Home
             </Link>
             <Link
               to="/about"
               onClick={() => setMenuOpen(false)}
-              className="text-gray-700 hover:text-blue-600 font-medium"
+              className="text-black hover:text-blue-600 font-sans"
             >
               About
             </Link>
@@ -132,7 +129,7 @@ export default function Header() {
               <Link
                 to="/profile"
                 onClick={() => setMenuOpen(false)}
-                className="text-gray-700 hover:text-blue-600 font-medium"
+                className="text-black hover:text-blue-600 font-sans"
               >
                 Profile
               </Link>
@@ -140,7 +137,7 @@ export default function Header() {
               <Link
                 to="/sign-in"
                 onClick={() => setMenuOpen(false)}
-                className="text-gray-700 hover:text-blue-600 font-medium"
+                className="text-black hover:text-blue-600 font-sans"
               >
                 Sign In
               </Link>

@@ -48,7 +48,7 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        <h1 className="text-slate-700 font-extrabold text-4xl md:text-5xl lg:text-6xl leading-tight">
+        <h1 className="text-slate-700 font-extrabold text-4xl md:text-5xl lg:text-6xl leading-tight capitalize">
           Find your next <span className="text-blue-600">perfect</span> place
           <br /> with ease
         </h1>
@@ -85,6 +85,32 @@ export default function Home() {
           ))}
       </Swiper>
 
+      <div className="max-w-5xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center gap-8 rounded-xl">
+        {/* Text Section */}
+        <div className="flex-1 text-center md:text-left">
+          <h2 className="text-2xl font-extrabold text-gray-800">
+            Get Home Recommendations
+          </h2>
+          <p className="mt-3 text-gray-600 text-lg">
+            Sign in for a more personalized experience and find your dream home.
+          </p>
+          <Link to="/sign-in">
+            <button className="mt-5 font-bold text-blue-700 border border-blue-700 px-4 py-2 rounded-md">
+              Sign In
+            </button>
+          </Link>
+        </div>
+
+        {/* Image Section */}
+        <div className="flex-1">
+          <img
+            src="/images/recommendation.jpg"
+            alt="Home recommendation"
+            className="w-full h-auto rounded-xl "
+          />
+        </div>
+      </div>
+
       {/* Listing Sections */}
       <div className="max-w-6xl mx-auto px-6 py-10 grid gap-12">
         {[
@@ -103,12 +129,17 @@ export default function Home() {
             data: saleListings,
             link: "/search?type=sale",
           },
+          {
+            title: "Place For Differently-abled",
+            data: saleListings,
+            link: "/search?type=sale",
+          },
         ].map(
           ({ title, data, link }) =>
             data?.length > 0 && (
               <div key={title}>
                 <div className="flex justify-between items-center border-b pb-2">
-                  <h2 className="text-2xl font-semibold text-slate-700">
+                  <h2 className="text-2xl font-semibold text-slate-700 capitalize">
                     {title}
                   </h2>
                   <Link
